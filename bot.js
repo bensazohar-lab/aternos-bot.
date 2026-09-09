@@ -1,13 +1,8 @@
 const mineflayer = require("mineflayer");
 
-// רשימת השרתים — הוסף כמה שתרצה
 const SERVERS = [
-  { host: "oooooij-A.aternos.me", port: 55413, username: "KeepAliveBot1" },
-  { host: "oooooij-A.aternos.me", port: 55413, username: "KeepAliveBot2" },
-  // { host: "oooooij-A.aternos.me", port: 55413, username: "KeepAliveBot3" },
+  { host: "oooooij-A.aternos.me", port:55413, username: "KeepAliveBot1" },
 ];
-
-const bots = [];
 
 SERVERS.forEach((server) => {
   const bot = mineflayer.createBot({
@@ -18,10 +13,10 @@ SERVERS.forEach((server) => {
   });
 
   bot.on("login", () => {
-    console.log(server.username + " connected to " + server.host + ":" + server.port);
+    console.log(server.username + " connected — chunk loaded at " + server.host);
   });
 
-  // תנועה כל 10 שניות — הליכה + קפיצה
+  // תנועה קלה כל 10 שניות — שומר על הצ'אנק טעון ומונע כיבוי
   setInterval(() => {
     if (bot.entity) {
       bot.setControlState("forward", true);
@@ -33,13 +28,5 @@ SERVERS.forEach((server) => {
     }
   }, 10000);
 
-  bot.on("error", (err) => {
-    console.log(server.username + " error: " + err.message);
-  });
-
-  bot.on("end", () => {
-    console.log(server.username + " disconnected");
-  });
-
-  bots.push(bot);
-});
+  bot.on("error", (err) => console.log(server.username + " error: " + err.message));
+  bot.on("end", () => console.log(server.username + " disconnected"));
