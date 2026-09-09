@@ -1,36 +1,32 @@
 const mineflayer = require("mineflayer");
 
-const HOST = "oooooij-A.aternos.me";
-const PORT = 55413;
+const HOST = "your-server.aternos.me";
+const PORT = 25565;
 const USERNAME = "KeepAliveBot";
 
-function createBot() {
-  const bot = mineflayer.createBot({
-    host: HOST,
-    port: PORT,
-    username: USERNAME,
-    version: false,
-  });
+const bot = mineflayer.createBot({
+  host: HOST,
+  port: PORT,
+  username: USERNAME,
+  version: false,
+});
 
-  bot.on("login", () => {
-    console.log("Bot connected to " + HOST + ":" + PORT);
-  });
+bot.on("login", () => {
+  console.log("Bot connected to " + HOST + ":" + PORT);
+});
 
-  setInterval(() => {
-    if (bot.entity) {
-      bot.setControlState("jump", true);
-      setTimeout(() => bot.setControlState("jump", false), 500);
-    }
-  }, 30000);
+// תנועה כל 10 שניות — הליכה + קפיצה כדי למנוע כיבוי
+setInterval(() => {
+  if (bot.entity) {
+    bot.setControlState("forward", true);
+    bot.setControlState("jump", true);
+    setTimeout(() => {
+      bot.setControlState("forward", false);
+      bot.setControlState("jump", false);
+    }, 1000);
+  }
+}, 10000);
 
-  bot.on("end", () => {
-    console.log("Disconnected. Reconnecting in 10s...");
-    setTimeout(createBot, 10000);
-  });
-
-  bot.on("error", (err) => {
-    console.log("Error:", err.message);
-  });
-}
-
-createBot();
+bot.on("error", (err) => {
+  console.log("Error:", err.message);
+});
