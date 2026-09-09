@@ -1,7 +1,7 @@
 const mineflayer = require("mineflayer");
 
-const HOST = "your-server.aternos.me";
-const PORT = 25565;
+const HOST = "oooooij-A.aternos.me:55413";
+const PORT = 55413;
 const USERNAME = "KeepAliveBot";
 
 function createBot() {
