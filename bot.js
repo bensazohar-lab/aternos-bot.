@@ -1,4 +1,5 @@
-const express = require("express");
+
+   const express = require("express");
 const cors = require("cors");
 const mineflayer = require("mineflayer");
 
@@ -6,17 +7,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const bots = {}; // key: "host:port" -> bot instance + meta
+const bots = {}; // key: "host:port" -> { bot, status, logs, ... }
 
 function makeKey(host, port) {
   return `${host}:${port}`;
 }
 
-function addLog(bot, msg) {
+function addLog(meta, msg) {
   const time = new Date().toLocaleTimeString("he-IL");
-  bot.logs.push(`[${time}] ${msg}`);
-  if (bot.logs.length > 50) bot.logs.shift();
-  console.log(`[${bot.key}] ${msg}`);
+  meta.logs.push(`[${time}] ${msg}`);
+  if (meta.logs.length > 50) meta.logs.shift();
+  console.log(`[${meta.key}] ${msg}`);
 }
 
 function startBot(host, port, username) {
@@ -28,7 +29,7 @@ function startBot(host, port, username) {
     port: parseInt(port),
     username: username || "AternosKeeper",
     auth: "offline",
-    version: false, // auto-detect
+    version: false, // auto-detect server version
   });
 
   const meta = {
@@ -48,7 +49,7 @@ function startBot(host, port, username) {
     meta.connectedAt = Date.now();
     addLog(meta, `Bot connected to ${host}:${port}`);
 
-    // AFK prevention — walk + jump every 30s
+    // AFK prevention — walk + jump every 30 seconds
     setInterval(() => {
       try {
         bot.setControlState("forward", true);
