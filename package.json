@@ -1,11 +1,14 @@
 {
   "name": "aternos-bot",
   "version": "1.0.0",
+  "type": "commonjs",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
   "dependencies": {
-    "mineflayer": "^4.20.1"
+    "mineflayer": "^4.20.1",
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
   }
 }
