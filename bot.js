@@ -6,17 +6,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const bots = {}; // key: "host:port" -> { bot, status, logs, ... }
+const bots = {}; // key: "host:port" -> bot instance + meta
 
 function makeKey(host, port) {
   return `${host}:${port}`;
 }
 
-function addLog(meta, msg) {
+function addLog(bot, msg) {
   const time = new Date().toLocaleTimeString("he-IL");
-  meta.logs.push(`[${time}] ${msg}`);
-  if (meta.logs.length > 50) meta.logs.shift();
-  console.log(`[${meta.key}] ${msg}`);
+  bot.logs.push(`[${time}] ${msg}`);
+  if (bot.logs.length > 50) bot.logs.shift();
+  console.log(`[${bot.key}] ${msg}`);
 }
 
 function startBot(host, port, username) {
@@ -28,7 +28,7 @@ function startBot(host, port, username) {
     port: parseInt(port),
     username: username || "AternosKeeper",
     auth: "offline",
-    version: false, // auto-detect server version
+    version: false, // auto-detect
   });
 
   const meta = {
@@ -48,7 +48,7 @@ function startBot(host, port, username) {
     meta.connectedAt = Date.now();
     addLog(meta, `Bot connected to ${host}:${port}`);
 
-    // AFK prevention — walk + jump every 30 seconds
+    // AFK prevention — walk + jump every 30s
     setInterval(() => {
       try {
         bot.setControlState("forward", true);
