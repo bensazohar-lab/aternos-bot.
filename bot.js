@@ -8,7 +8,7 @@ const bot = mineflayer.createBot({
   host: HOST,
   port: PORT,
   username: USERNAME,
-  version: false,
+  version: 1.21.11,
 });
 
 bot.on("login", () => {
